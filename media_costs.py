@@ -85,10 +85,11 @@ def get_mon_num_from_date(curr_date):
 
 
 
-# In[5]:
+# In[14]:
 
 
 def get_media_costs_report(start_date='', end_date='', media_type='tv', flag='regular', main_filter=False):
+
     start_time = datetime.now()
     print(f'Скрипт запущен {start_time}')
 
@@ -142,7 +143,9 @@ def get_media_costs_report(start_date='', end_date='', media_type='tv', flag='re
 
     # считаем кол-во месяцев в периоде
     # каждый месяц мы будем забирать по отдельности и записывать его в БД
-    count_months = relativedelta(end_date, start_date).months + 1
+    total_years = relativedelta(end_date, start_date).years * 12
+    count_months = relativedelta(end_date, start_date).months + total_years + 1
+
 
     print()
     print(f'Загружаем отчет за период {start_date} - {end_date}. Общее количество месяцев: {count_months}')
@@ -161,44 +164,44 @@ def get_media_costs_report(start_date='', end_date='', media_type='tv', flag='re
         table_name = config_media_costs.media_dicts_costs[media_type][0]
         int_lst = config_media_costs.media_dicts_costs[media_type][2]
         float_lst = config_media_costs.media_dicts_costs[media_type][3]
-# Забираем статистику по ТВ
-        if media_type=='tv':
-            df = get_table_tv_costs(int_lst, 
-                               float_lst, 
-                               start_date=str(cur_date), 
-                               mon_num=int(cur_mon), 
-                               media_type=media_type,
-                                main_filter=main_filter)
-# Забираем статистику по Радио
-        if media_type=='ra':
-            df = get_table_radio_costs(int_lst, 
-                               float_lst, 
-                               start_date=str(cur_date), 
-                               mon_num=int(cur_mon), 
-                               media_type=media_type,
-                                main_filter=main_filter)
-# Забираем статистику по Наружке
-        if media_type=='od':
-            df = get_table_outdoor_costs(int_lst, 
-                               float_lst, 
-                               start_date=str(cur_date), 
-                               mon_num=int(cur_mon), 
-                               media_type=media_type,
-                                main_filter=main_filter)
-# Забираем статистику по Прессе
-        if media_type=='pr':
-            df = get_table_press_costs(int_lst, 
-                               float_lst, 
-                               start_date=str(cur_date), 
-                               mon_num=int(cur_mon), 
-                               media_type=media_type,
-                                main_filter=main_filter)
+# # Забираем статистику по ТВ
+#         if media_type=='tv':
+#             df = get_table_tv_costs(int_lst, 
+#                                float_lst, 
+#                                start_date=str(cur_date), 
+#                                mon_num=int(cur_mon), 
+#                                media_type=media_type,
+#                                 main_filter=main_filter)
+# # Забираем статистику по Радио
+#         if media_type=='ra':
+#             df = get_table_radio_costs(int_lst, 
+#                                float_lst, 
+#                                start_date=str(cur_date), 
+#                                mon_num=int(cur_mon), 
+#                                media_type=media_type,
+#                                 main_filter=main_filter)
+# # Забираем статистику по Наружке
+#         if media_type=='od':
+#             df = get_table_outdoor_costs(int_lst, 
+#                                float_lst, 
+#                                start_date=str(cur_date), 
+#                                mon_num=int(cur_mon), 
+#                                media_type=media_type,
+#                                 main_filter=main_filter)
+# # Забираем статистику по Прессе
+#         if media_type=='pr':
+#             df = get_table_press_costs(int_lst, 
+#                                float_lst, 
+#                                start_date=str(cur_date), 
+#                                mon_num=int(cur_mon), 
+#                                media_type=media_type,
+#                                 main_filter=main_filter)
 
-        downloadTableToDB(config.db_name, table_name, df)
+#         downloadTableToDB(config.db_name, table_name, df)
 
 
 
-# In[6]:
+# In[7]:
 
 
 # start_date='2023-01-01'
@@ -207,7 +210,7 @@ def get_media_costs_report(start_date='', end_date='', media_type='tv', flag='re
 #     get_media_costs_report(start_date=start_date, end_date=end_date, media_type=media_type, flag='first')
 
 
-# In[7]:
+# In[8]:
 
 
 def getMediaTypeDetail(row, media_type):
@@ -234,7 +237,7 @@ def getMediaTypeDetail(row, media_type):
             return 'ТВ'
 
 
-# In[8]:
+# In[9]:
 
 
 """
@@ -291,7 +294,7 @@ def get_table_tv_costs(*normalize_lst, media_type, start_date='2023-01-01', mon_
     return df
 
 
-# In[15]:
+# In[10]:
 
 
 """
@@ -348,7 +351,7 @@ def get_table_radio_costs(*normalize_lst, media_type, start_date='2023-01-01', m
     return df
 
 
-# In[16]:
+# In[11]:
 
 
 """
@@ -405,7 +408,7 @@ def get_table_outdoor_costs(*normalize_lst, media_type, start_date='2023-01-01',
     return df
 
 
-# In[17]:
+# In[12]:
 
 
 """
